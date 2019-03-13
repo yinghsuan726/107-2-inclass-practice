@@ -30,6 +30,13 @@ a<-2
 `大家的生活費少多少`<-10000000000
 ```
 
+```{r}
+aVector<-c(3L,5L,7L)
+```
+```{r}
+class(aVector)
+```
+
 ```{r cars}
 summary(cars)
 ```
