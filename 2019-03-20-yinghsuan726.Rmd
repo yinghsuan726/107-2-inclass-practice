@@ -61,6 +61,33 @@ trueInteger
 ```
 
 ```{r}
-lubridate::
+library(lubridate)
+#雖然R本身有時間處理的相關函數，但最好用的還是lubridate這個套件
+dtObject<-ymd_hms("1970-01-01 00:02:53") 
+dtObjectVector<-ymd_hms(
+  c("1970-01-01 00:02:53",
+    "1980-02-11 11:25:22")
+)
+class(dtObject)
+#POSIX=跨作業系統的協定時間
+#若未更改設定 電腦會自動判斷我們位於經度0度的位置
+```
+
+
+
+
+```{r}
+typeof(dtObject)
+
+#typeof可看出電腦用什麼方式儲存 
+#double=非整數之意
+```
+#顯示目前電腦時區設定
+```{r}
+Sys.timezone()
+#可測得電腦位於什麼時區
+```
+```{r}
+twDateTime <- ymd_hms("2019-03-18 14:04:00", tz="Asia/Taipei")
 ```
 
