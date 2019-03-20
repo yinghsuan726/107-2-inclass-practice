@@ -16,12 +16,51 @@ dialogue <- c("小明說：'明天不用上課。'",
 cat(dialogue, sep="\n")
 ```
 ```{r}
- c("經濟系", "經濟系", "法律系")
+studentMajors1<- c("經濟系", "經濟系", "法律系")
+```
+```{r}
+class(studentMajors1)
 ```
 
 ```{r}
 studentMajors <- factor(
   c("經濟系", "經濟系", "法律系")
 )
+```
+```{r}
+class(studentMajors)
+```
+
+```{r}
+levels(studentMajors)
+```
+```{r}
+as.integer(studentMajors)
+```
+```{r}
+BirthPlace<-factor(c("台北市","台中市","台中市","台北市","台北市"))
+
+BirthPlace
+as.integer(BirthPlace)
+levels(BirthPlace)
+is.factor(BirthPlace)
+as.factor(BirthPlace)
+
+```
+
+
+
+```{r}
+stringInteger <- c("1","2","-11")
+class(stringInteger) # 無法進行數值運算
+stringInteger 
+
+trueInteger <- as.integer(stringInteger)
+class(trueInteger) # 可以進行數值運算
+trueInteger
+```
+
+```{r}
+lubridate::
 ```
 
