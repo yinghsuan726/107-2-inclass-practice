@@ -150,4 +150,8 @@ y3 <- c(NA,"小華")
 is.na(x2)
 sum(x2)
 ```
+```{r}
+library(lubridate)
+dmy_hms(03/14/2019 08:18:47)
+```
 

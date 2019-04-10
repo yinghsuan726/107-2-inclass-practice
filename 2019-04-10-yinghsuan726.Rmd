@@ -1,11 +1,72 @@
 ---
-title: '2019-04-10'
-author: "林茂廷"
+title: '04-10 5.5 Operation on Strings'
+author: "蘇映璇"
 date: "4/10/2019"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(stringr)
+```
+#Subset 依條件篩選
+#例如：選出course當中帶有“經濟學”的元素
+```{r}
+course <- c("個體經濟學","投資學","總體經濟學")
+```
+#str_subset(): 保留字串向量元素裡符合某種規律（pattern）的向量元素——會縮小向量長度。
+```{r}
+str_subset(course,"經濟學")
+#從course中選出包含"經濟學"的物件
+```
+#str_detect()：偵測（detect）元素裡是否符合某種規律，若符合回TRUE, 不符合回FALSE
+```{r}
+str_detect(course,"經濟學")
+#從course中"偵測"物件內是否包含"經濟學"
+```
+#利用str_sub()取出以下每位學生系別及入學年。
+#str_sub():str_sub(string, start position, end position)
+```{r}
+studentID<-c(
+  '410177115','410176080','410174233','410177011','410182045','410176014')
+系別<-str_sub(studentID,5,6)
+系別
+入學年<-str_sub(studentID,2,4)
+入學年
+```
+
+#Join 合併
+#例如：將month和day合併成“3月11日”,“4月5日”,“2月7日”
+```{r}
+month <- c("3","4","2")
+day <- c("11","5","7")
+```
+#str_c(): 多個字串向量的合併
+```{r}
+char1 <- c("月","月","月")
+char2 <- c("日","日","日")
+month
+char1
+day 
+char2
+```
+#將上述串成日期
+```{r}
+str_c(month,char1,day,char2)
+```
+
+#可和上述有同樣結果
+```{r}
+str_c(month,c("月"),day,c("日"))
+str_c(month,"月",day,"日")  #偷懶法
+```
+#進行字串向量合併時，我們也可以自行決定要不要加分隔（separation）符號：
+```{r}
+month
+day
+str_c(month,day, sep="-")#sep=separation
 ```
 
