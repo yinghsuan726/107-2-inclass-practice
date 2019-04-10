@@ -58,7 +58,7 @@ char1
 day 
 char2
 #將上述串成日期
-str_c(month,char1,day,char2)
+str_c(month,char1,day,char2)#串接month,char1,day,char2四個物件
 ```
 
 #可和上述有同樣結果
