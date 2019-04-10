@@ -1,5 +1,5 @@
 ---
-title: '04-10 5.5 Operation on Strings'
+title: '04-10 5.5 6.1 6.2'
 author: "蘇映璇"
 date: "4/10/2019"
 output: html_document
@@ -182,5 +182,56 @@ str_c("西元",y2+1911,"年",m2,"月")
 4.2010變成"2010"(as.character())
 5."2010" "01",合成"2010/01"
 
+________________________________________________________
+#第 6 章 Vectors
+6.2 Two types of vectors
+R裡的Vectors有兩大類：
 
+1.Atomic vectors: 向量內的每個元素有相同的type, 均為numeric，均為character，均為logical等等，可使用的type有logical, integer, double, character, complex, and raw.
+使用c( )將元素包起來。
 
+2.Lists: 向量內的每個元素不需要有相同type，每個元素可以是不同長度的向量。
+使用list( )將元素包起來。
+
+#Atomic vector範例
+```{r}
+a<-c(1:3)
+typeof(a)
+a
+```
+c(1:3)或只寫1:3會產生c(1,2,3)`的數值向量，因此a有3個元素，每個都是數值，其值分別是1,2,3。
+
+每個元素我們可以用name=value的型式對它命名：
+```{r}
+aWithNames <- c(
+  a1=1,
+  a2=2,
+  a3=3
+)
+typeof(a)
+aWithNames
+```
+
+#List範例
+```{r}
+b1<-list("a","b",c(1:10))
+typeof(b1)
+```
+b1有三個元素：
+
+第一個：“a”
+
+第二個：“b”
+
+第三個：c(1,2,3,…,10) (由1:10產生的1至10的數值向量)
+
+使用name=value命名及定義內容值：
+```{r}
+b2<-list(
+  第一個="a",
+  第二個="b",
+  第三個=c(1:10))
+b1
+b2
+```
+[[]](雙括號):意指是list裡的第幾個元素 eg.[[1]]:是list裡的第一個元素
