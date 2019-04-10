@@ -30,10 +30,13 @@ str_detect(course,"經濟學")
 #利用str_sub()取出以下每位學生系別及入學年。
 #str_sub():str_sub(string, start position, end position)
 ```{r}
+#定義studentID
 studentID<-c(
   '410177115','410176080','410174233','410177011','410182045','410176014')
+#取出系別
 系別<-str_sub(studentID,5,6)
 系別
+#取出入學年
 入學年<-str_sub(studentID,2,4)
 入學年
 ```
@@ -41,20 +44,20 @@ studentID<-c(
 #Join 合併
 #例如：將month和day合併成“3月11日”,“4月5日”,“2月7日”
 ```{r}
+#定義month day
 month <- c("3","4","2")
 day <- c("11","5","7")
 ```
 #str_c(): 多個字串向量的合併
 ```{r}
+#定義char1 char2
 char1 <- c("月","月","月")
 char2 <- c("日","日","日")
 month
 char1
 day 
 char2
-```
 #將上述串成日期
-```{r}
 str_c(month,char1,day,char2)
 ```
 
@@ -68,5 +71,42 @@ str_c(month,"月",day,"日")  #偷懶法
 month
 day
 str_c(month,day, sep="-")#sep=separation
+```
+#Split：分割
+#str_split(): 分割一個字串向量（後面章節再詳述）
+
+```{r}
+dates <- c("3-11", "4-5",  "2-7")
+str_split(dates,"-")#以-作為分割點分割
+```
+#Replace: 取代
+#str_replace()
+```{r}
+dates
+str_replace(dates,"-","月")#將-以月取代
+```
+#str_replace_all()
+```{r}
+dates2 <- c("3-11-2019", "4-5-2017",  "2-7-2015")
+dates2
+str_replace(dates2,"-","/")
+str_replace_all(dates2,"-","/")#將"所有"-取代成/
+```
+
+每個GitHub repo都有一個固定的網址型式，如： https://github.com/tpemartin/107-2-inclass-practice 其中：
+
+tpemartin: username
+
+107-2-inclass-practice: repo name
+#執行以下程式引入資料
+```{r}
+library(readr)
+githubData <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/githubData.csv")
+username <- githubData$`GitHub username`[11:16]
+reponame <- githubData$`GitHub repo name`[11:16]
+```
+#將username與reponame合併成Github repo網址。
+```{r}
+str_c("https://github.com",username,reponame,sep="/")
 ```
 
