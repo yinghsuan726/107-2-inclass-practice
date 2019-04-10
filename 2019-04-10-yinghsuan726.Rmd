@@ -107,6 +107,80 @@ reponame <- githubData$`GitHub repo name`[11:16]
 ```
 #將username與reponame合併成Github repo網址。
 ```{r}
+#法一
 str_c("https://github.com",username,reponame,sep="/")
+#法二
+str_c("https://github.com","/",username,"/",reponame)
 ```
+
+#5.6 綜合練習
+
+練習1
+請先執行以下程式引入資料：
+```{r}
+library(readr)
+filmVotingData <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/%E7%AC%AC%E4%B8%89%E5%B1%86%E7%B6%93%E6%BF%9F%E6%92%AD%E5%AE%A2%E7%AB%B6%E8%B3%BD%E5%8F%83%E8%B3%BD%E4%BD%9C%E5%93%81%E6%8A%95%E7%A5%A8%E7%B5%90%E6%9E%9C%E6%A8%A3%E6%9C%AC%20-%20Sheet1.csv")
+birthday<-filmVotingData$`出生西元年月日（驗證本人用）`
+```
+
+#試著將birthday變成“西元yyyy年mm月dd日”型式。
+
+```{r}
+birthday[1:2]#取出birthday的前兩項
+str_sub(birthday,1,4)->a
+str_sub(birthday,5,6)->b
+str_sub(birthday,7,8)->c
+str_c("西元",a,"年",b,"月",c,"日")
+```
+
+練習2 Taiwan date-time
+台灣的資料常為民國年月，又因為其資料記載方式，初次引入的年月資料常如下所示：
+```{r}
+民國年月<-c("099/01","099/02","099/03")
+```
+#將上述資料轉成西元年月格式（民國年+1911即為西元年）的date class。你的程式設計策略為何？
+```{r}
+#法一
+a<-str_sub(民國年月,1,3)
+a
+b<-str_sub(民國年月,4,6)
+b
+
+c<-as.integer(a)+1911
+c
+str_c(c,b)
+```
+```{r}
+#法二
+ym<-c("099/01","099/02","099/03")
+y <- as.integer(str_sub(ym,2,3))+1911
+m <- str_sub(ym,5,6)
+str_c("西元",y,"年",m,"月")
+```
+
+```{r}
+#法三
+time1 <- str_sub(民國年月,1,3)
+time2 <- as.integer(time1)
+time3 <- as.character(time2 + 1911) 
+str_c(time3,str_sub(民國年月,4,6))
+```
+```{r}
+#法四
+民國年月<-c("099/01","099/02","099/03")
+y<- str_sub(民國年月,2,3)
+m<- str_sub(民國年月,5,6)
+y2<- as.integer(y)
+m2<- as.integer(m)
+str_c("西元",y2+1911,"年",m2,"月")
+```
+
+#老師作法
+1."099/01"變成"099","01"(str_sub)
+2."099"變成99(as.integer(())
+3.99+1911
+4.2010變成"2010"(as.character())
+5."2010" "01",合成"2010/01"
+
+
 
