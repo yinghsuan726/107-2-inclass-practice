@@ -15,3 +15,205 @@ library(stringr)
 library(lubridate)
 ```
 
+6.2 Two types of vectors
+R裡的Vectors有兩大類：
+
+Atomic vectors: 向量內的每個元素有相同的type, 均為numeric，均為character，均為logical等等，可使用的type有logical, integer, double, character, complex, and raw.
+使用c( )將元素包起來。
+Lists: 向量內的每個元素不需要有相同type，每個元素可以是不同長度的向量。
+使用list( )將元素包起來。
+
+
+Atomic vector範例
+```{r}
+a<-c(1:3)
+typeof(a)
+a
+```
+
+c(1:3)或只寫1:3會產生c(1,2,3)`的數值向量，因此a有3個元素，每個都是數值，其值分別是1,2,3。
+
+每個元素我們可以用name=value的型式對它命名：
+```{r}
+aWithNames <- c(
+  a1=1,
+  a2=2,
+  a3=3
+)
+typeof(a)
+aWithNames
+```
+
+List範例
+```{r}
+b1<-list("a","b",c(1:10))
+typeof(b1)
+```
+b1有三個元素：
+
+第一個：“a”
+
+第二個：“b”
+
+第三個：c(1,2,3,…,10) (由1:10產生的1至10的數值向量)
+
+使用name=value命名及定義內容值：
+```{r}
+b2<-list(
+  第一個="a",
+  第二個="b",
+  第三個=c(1:10))
+b1
+b2
+```
+
+6.3 Recursive objects
+list元素可以是list，所以它的架構可以不停留在一個層次而可不斷加深，稱之為Recursive object，例如：
+```{r}
+studentRecord <-
+  list(
+    學號="410073058",
+    姓名="王小明",
+    性別="男",
+    學年平均成績=list(
+      一年級=88,
+      二年級=90.3,
+      三年級=92,
+      四年級=95
+    )
+  )
+
+studentRecord
+```
+
+6.4 Object extraction
+有時我們只想取出vector裡的某個元素，以下面的list vector為例：
+```{r}
+plasticContainer <- list(
+  greenBox=c("paper","scissor"),     # location 1
+  redBox=c(1,3,2.5),               # location 2
+  blueBox=c(TRUE,FALSE,TRUE,TRUE)    # location 3
+)
+```
+它有三個元素：greenBox, redBox, blueBox；各別在位置順序是1，2，3。
+
+另外：
+
+greenBox: 有二個沒命名的元素
+
+redBox: 有三個沒命名的元素
+
+blueBox: 有四個沒命名的元素
+
+以下面的成績單物件為例：
+
+```{r}
+成績單 <- c(
+  個經=90,
+  總經=77,
+  統計=88
+)
+```
+它是什麼樣的vector? 各別元素是什麼？位置為？
+
+6.4.1 [[.]] extraction
+[[.]]用來取出所要的「一個」元素：
+
+若元素有命名，.可用"元素名稱"。
+
+否則，也可以用元素位置數字。
+
+取出greenBox這個元素：
+```{r}
+plasticContainer[["greenBox"]] 
+plasticContainer[[1]]
+```
+
+greenBox包含兩個元素：paper, scissor。如果上面要取出paper，要怎麼延伸拿取？
+
+該元素沒命名，只能用數字。
+
+sol1
+```{r}
+x <- plasticContainer[["greenBox"]] 
+x[[1]]
+```
+
+方法二：
+所有extraction操作均"可直接串接"
+```{r}
+plasticContainer[["greenBox"]][[1]]
+```
+
+#請取出前面成績單物件的個經元素。
+```{r}
+成績單[["個經"]]
+```
+
+#針對studentRecord物件:
+
+#請取出姓名元素。
+```{r}
+studentRecord[["姓名"]]
+
+```
+
+#請取出三年級學年平均成績。
+```{r}
+studentRecord[["學年平均成績"]][[3]]
+```
+
+6.4.2 [.] extraction
+[.]用來取出所要的「一群」元素：
+
+若元素有命名，.可用c("元素名稱1","元素名稱2",...)。
+
+否則，也可以用元素位置數字, 如c(2,4)代表第2及第4個元素。
+
+同時取出greenBox及redBox兩個元素：
+```{r}
+plasticContainer[c("greenBox","redBox")] 
+plasticContainer[c(1,2)]
+```
+要留意[.]所取出的物群會以母層vector結構保存。以plasticContainer[c(1,2)]為例，取出的物群來自一個為list vector結構的母層，所以它也會是個list vector，也就是說它相當於以下的list vector:
+
+```{r}
+list(
+  greenBox=c("paper","scissor"),
+  redBox=c(1,3,2.5)
+)
+```
+對照一下源頭母層的定義會更清楚：
+```{r}
+plasticContainer <- list(
+  greenBox=c("paper","scissor"),
+  redBox=c(1,3,2.5),  
+  blueBox=c(TRUE,FALSE,TRUE,TRUE) 
+)
+```
+[.]是用來取出一群元素，當然一群的個數也可以是一個，然而以[.]和[[.]]取一個元素的結果會有一些不同。以下兩者取出來的結果其class為什麼？
+
+```{r}
+extract1 <- plasticContainer[c("greenBox")]
+extract1
+#大箱子還在 整個過程亦只保留大箱子以及裡面的綠箱子
+#[]可視為保留的動作
+```
+A:原母層的class
+```{r}
+extract2 <- plasticContainer[[c("greenBox")]]
+extract2
+#GREEN BOX本身是ATOMIC VECTOT 大箱子已經丟掉了
+#[[]]可視為抓取的動作
+```
+
+
+#請各自由extract1及extract2取出“paper”元素值。
+```{r}
+extract1[[1]][[1]]
+```
+```{r}
+extract2[[1]]
+```
+
+
