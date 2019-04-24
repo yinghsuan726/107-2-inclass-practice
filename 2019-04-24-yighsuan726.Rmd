@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+matrix 矩陣
 ```{r}
 mat2<-matrix(
   c("a","b","c","d"),2,2
@@ -18,6 +18,7 @@ class(mat2)
 typeof(mat2)
 mat2[[2]]
 mat2[c(T,F,F,T)]
+mat2[c(1,4)]
 ```
 
 
@@ -46,6 +47,18 @@ StuList <- list(
   )
 StuList 
 ```
+
+
+```{r}
+StuDF <- list(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50)
+  )
+StuDF
+```
+
+
 data frame：若每個變數相同元素位置來自於同一筆資料，我們可以使用data frame的class來儲存這樣的（長）方形資料表。\
 ```{r}
 StuDF <- data.frame(
@@ -56,4 +69,86 @@ StuDF <- data.frame(
 StuDF 
 ```
 
+想讓List轉成data frame
+```{r}
+as.data.frame(StuList)->StuDF3
+class(StuDF3)
+StuDF3
+```
+
+從StuDF取出胖虎
+```{r}
+StuDF[["姓名"]][[3]]
+class(StuDF$姓名)
+#因為data frame在創造元素的時候 遇到character它會自動轉成factor 所以要手動轉回來
+#data.frame()遇到變數輸入為character class時，內定會被轉成factor。
+```
+轉乘charater
+```{r}
+StuDF$姓名 <- as.character(StuDF$姓名)
+class(StuDF$姓名)
+```
+Data frame其本質（即type）是list vector，但因它的資料表配置特性而會有更豐富的特質，因此其class會自成一類。
+
+取消內定character為factor的方式：as.data.frame(..., stringsAsFactors = FALSE)
+
+```{r}
+as.data.frame(StuList,stringsAsFactors = F) -> StuDF4
+class(StuDF4)
+```
+
+```{r}
+StuDF2 <- data.frame(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50),
+  stringsAsFactors = FALSE
+  )
+StuDF2 
+```
+
+#data frame的建立也可以用list去建好，再透過as.data.frame()去改變其class成data frame.
+
+[.R , .C] object extraction
+
+[.R,.C]: 為方形資料class（即matrix和data frame），獨有的object extraction。
+(.R: 代表哪幾列（rows）； .C: 代表哪幾欄/行（columns）)
+
+只有一個[]中括號，所以和[.]的.有相同的規則： .R與.C可以用
+
+數值向量：如c(1,8,12)
+
+邏輯向量：如c(T,T,F)
+
+元素名稱向量（當元素有名字時）
+
+LETTERS(大寫)letters(小寫) # R內設元素值為英文字母群的character vector
+```{r}
+chosenLETTERS <- LETTERS[1:15]
+matObj1 <- matrix(chosenLETTERS,5,3)
+matObj1
+```
+
+EXCERCISE
+```{r}
+myletter<-letters[1:16]
+matletter<-matrix(myletter,4,4)
+matletter
+tolower(matletter)#大寫轉小寫
+toupper(matletter)#小寫轉大寫
+```
+
+```{r}
+matletter[[9]]
+matletter
+matletter[c(1,2),c(3,4)]
+#c(1,2)=row1&4列 c(3,4)=columm3&4行
+```
+利用邏輯向量的方式取出FKIN
+```{r}
+chosenLETTERS <- LETTERS[1:15]
+matObj1 <- matrix(chosenLETTERS,5,3)
+matObj1
+matObj1[c(T,F,F,T,F),c(F,T,T)]
+```
 
