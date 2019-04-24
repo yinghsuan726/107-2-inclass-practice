@@ -1,0 +1,59 @@
+---
+title: '2019-04-24'
+author: "蘇映璇"
+date: "4/24/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+mat2<-matrix(
+  c("a","b","c","d"),2,2
+)
+mat2
+class(mat2)
+typeof(mat2)
+mat2[[2]]
+mat2[c(T,F,F,T)]
+```
+
+
+```{r}
+m2<-matrix(c("a","b","c","d"),2,2)
+class(m2)
+typeof(m2)
+a<-m2[[1]]
+c<-m2[[3]]
+bd<-m2[2,]
+a
+c
+bd
+```
+
+
+Data Frame
+考慮以下資料，它含有學號，姓名，成績等三個資料變數，變數裡的元素個別代表一筆資料：
+
+list：因為三個變數向量的type不相同，只能用list儲存。
+```{r}
+StuList <- list(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50)
+  )
+StuList 
+```
+data frame：若每個變數相同元素位置來自於同一筆資料，我們可以使用data frame的class來儲存這樣的（長）方形資料表。\
+```{r}
+StuDF <- data.frame(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50)
+  )
+StuDF 
+```
+
+
