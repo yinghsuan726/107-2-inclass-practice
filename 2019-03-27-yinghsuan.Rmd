@@ -11,11 +11,16 @@ dtObject
 
 ```{r}
 twDateTime <- ymd_hms("2019-03-18 14:04:00", tz="Asia/Taipei")
+
 twDateTime
+
 ```
 ```{r}
-LisbonDateTime <- with_tz(twDateTime,tzone="Europe/Lisbon")
+LisbonDateTime <- with_tz(twDateTime,tz="Europe/Lisbon")
+#with_tz轉換時區
+#tz tzone都可
 LisbonDateTime
+
 ```
 
 ##excersice
@@ -23,6 +28,8 @@ LisbonDateTime
 Bangkoktime<-with_tz(twDateTime,tzone="Asia/Bangkok")
 Bangkoktime
 ```
+#請問twDateTime與LisbonDateTime的UTC時間為何？（以螢幕顯示為主）
+**不管用什麼時區顯示在螢幕，電腦永遠儲存記憶的是UTC秒數。**
 ```{r}
 typeof(twDateTime)
 as.double(twDateTime)
@@ -36,10 +43,25 @@ typeof(Bangkoktime)
 as.double(Bangkoktime)
 ```
 
+#Other date time format
+每個人習慣的date time文字記錄模式都不同，如Google習慣這樣寫“3/14/2019 8:18:47”。
+
+lubridate套件提供以下四大類函數：
+
+ymd_hms(), ymd_hm(), ymd_h()
+ydm_hms(), ydm_hm(), ydm_h() 
+mdy_hms(), mdy_hm(), mdy_h()
+dmy_hms(), dmy_hm(), dmy_h()
 ```{r}
 mytime<-ymd_hms("2019-03-27 15:49:00")
 mytime
 as.double(mytime)
+```
+#電腦在存Date時，是該日期與1970-01-01相差的日數：
+```{r}
+as.integer(ymd("1970-01-01"))
+as.integer(ymd("1970-01-02"))
+as.integer(ymd("2019-03-11"))
 ```
 
 ```{r}
@@ -48,29 +70,35 @@ as.integer(ymd_hms("1970-01-02 00:00:01"))
 as.double(ymd("1970-01-01"))
 as.double(ymd("1970-01-02"))
 ```
-請讓電腦理解以下兩種日期：
+#請讓電腦理解以下兩種日期：
 
 “2018-09-11”
 
 “March 3, 2019”
 ```{r}
-ymd("2018-09-11")
-mdy("March 3, 2019")
+ymd("2018-09-11")->ex1
+mdy("March 3, 2019")->ex2
+typeof(ex1)
+typeof(ex2)
 ```
-
-#5-1
+#第 5 章 Operation on vectors
+5.1 Mathematical operations
+加、減、乘、除： +, -, *, /
+餘數：%%
+次方：^ 或 **
 ```{r}
 a <- c(1, 5, -3)
 b <- c(0.5, 12, 2)
 aL <- c(1L, 5L, -3L)
 bL <- c(-2L, -4L, 8L)
-```
 
+```
+#試著練習a,b間的加減乘除
 ```{r}
 a+b
 a+bL
-```
 
+```
 請問a+bL與aL+bL的class分別是什麼？如果用-和*呢？
 ```{r}
 class(a+bL)
@@ -85,25 +113,60 @@ aL/bL
 c <- 4
 
 c+a
+#會將a的每個向都加上c
+
 ```
 
 ```{r}
 a%%aL
+a^b
+a %% b
+10%%3
+#結果顯示為1 代表10除以3於1
 ```
-
+#twDateTime可以進行數字加減運算嗎？如果可以它是什麼意思？
 ```{r}
 twDateTime <- ymd_hms("2019-03-18 14:04:00", tz="Asia/Taipei")
 twDateTime +1
+#加/減秒數
 ```
 
-請計算“2019-08-11”與“2000-02-01”的兩個日期的相減。相減完之後的值具有什麼class?
+#請計算“2019-08-11”與“2000-02-01”的兩個日期的相減。相減完之後的值具有什麼class?
 ```{r}
 ymd("2019-08-11")->z
 ymd("2000-02-01")->x
 z-x
 class(z-x)
+#兩個時間相減一定是經過整整一段時間的duration概念。
+```
+#5.2 Operation on date time
+```{r}
+startingDate <- ymd("2000-02-17")
 ```
 
+```{r}
+startingDate + years(1)
+#明年此時(period)
+#代表只有年份換
+```
+
+```{r}
+startingDate + dyears(1)
+#經過整整一年(duration)
+
+```
+```{r}
+ymd("2000-02-01") -> startingDate
+ymd("2019-08-11") -> endingDate
+endingDate - startingDate
+#兩個時間相減一定是經過整整一段時間的duration概念。
+```
+#5.3 Relational Operators
+>,<,<=,>=: 分別為大於、小於、小於等於、大於等於
+
+==: 等於
+
+!=: 不等於
 ```{r}
 x=1
 x
@@ -114,20 +177,23 @@ x <- 5
 y <- 7
 x==y
 x!=y
+#x = y 和 x <- y 一樣 此處須注意!!
 ```
 ```{r}
 x2 <- c(1,5,10)
 y2 <- c(-1,5,20)
 x2==y2
 ```
-
+**==與!=可使用於字串**
 ```{r}
 x3 <- c("小明","小花")
 y3 <- c("小明","小華")
 x3==y3
 x3!=y3
 ```
+#還有一個常用的關連運算：
 
+%in%: 屬於
 ```{r}
 x4 <- c(1,5,8)
 y4 <- c(5,8)
@@ -141,17 +207,23 @@ y5 <- c("台北市","新北市")
 
 x5 %in% y5
 ```
+有時資料有缺失，在R裡會記成NA(即not available)如下例：
 ```{r}
 x2 <- c(1,NA,10)
 y2 <- c(-1,NA,20)
 
 x3 <- c(NA,"小花")
 y3 <- c(NA,"小華")
+#前述的關係判斷遇到NA時，結果都會是NA——即無法判斷。要知道向量內各元素值是否NA，可使用is.na():
 is.na(x2)
 sum(x2)
 ```
+#R還有一種特別的缺失資料NaN 
+(即not a number)，出現在**沒有定義**的數學運算上，如：
 ```{r}
-library(lubridate)
-dmy_hms(03/14/2019 08:18:47)
+0/0
 ```
+
+
+
 

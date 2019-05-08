@@ -31,10 +31,39 @@ a<-2
 ```
 
 ```{r}
+a<-c(5,6,7)
+class(a)
+is.double(a)
+is.integer(a)
+is.numeric(a)
+```
+
+```{r}
 aVector<-c(3L,5L,7L)
 ```
 ```{r}
 class(aVector)
+```
+
+```{r}
+bVector<-c("你好","How are you?")
+class(bVector)
+typeof(bVector)
+```
+
+```{r}
+dialogue <- c('小明說："明天不用上課。"',
+               '小花說："真的嗎？"')
+
+cat(dialogue, sep="\n")
+```
+```{r}
+aLogical <- c(T,TRUE,F,FALSE,FALSE)
+class(aLogical)
+# 加總向量內的所有元素值。
+sum(aLogical)
+# 加總向量內的所有元素值。
+sum(!aLogical)
 ```
 
 ```{r cars}

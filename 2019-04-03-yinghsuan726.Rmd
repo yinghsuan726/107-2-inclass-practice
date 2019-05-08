@@ -96,13 +96,20 @@ sum(currency == "日圓JPY/USD")
 ```
 
 # 5.4 Logical Operators
+針對class為logical之物件所進行之操作，主要有：
 
+&: AND
+
+|: OR
+
+!: NOT (將T改F, F改T)
 ```{r}
 x5 <- c("台北市","新北市","高雄市")
 greatTaipei <- c("台北市","新北市")
 
 
 x5 %in% greatTaipei
+
 ```
 
 
@@ -122,9 +129,10 @@ y5=="女"
 
 
 
-
+ 
 ```{r}
 !(y5=="女")
+xor(x5 %in% greatTaipei, y5=="女")
 ```
 
 > 圈圏是要圏出"Relational Operation"為真的元素在物件內的「位置」
@@ -150,7 +158,7 @@ y5
 (x5 %in% greatTaipei) | (y5=="女")
 ```
 
-
+很多時候我們想知道向量中第幾筆元素資料為TRUE, 此時可用which():
 ```{r}
 which((x5 %in% greatTaipei) | (y5=="女"))
 ```
@@ -253,7 +261,7 @@ isExchangeRateNA <-
 sum(isExchangeRateNA)
 ```
 
-排除NA後，幣別為“歐元USD/EUR”的資料有多少筆
+#排除NA後，幣別為“歐元USD/EUR”的資料有多少筆
 
 ```{r}
 isNotNA <- !is.na(exchangeRate)
@@ -301,7 +309,7 @@ sum(
 )
 ```
 
-資料來自經濟學系學生且為選修課
+有多少筆資料來自經濟學系學生且為選修課
 ```{r}
 sum(
   major == "經濟學系" &

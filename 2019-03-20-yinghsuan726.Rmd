@@ -23,9 +23,14 @@ class(studentMajors1)
 ```
 
 ```{r}
+levels(studentMajors1)
+```
+
+```{r}
 studentMajors <- factor(
   c("經濟系", "經濟系", "法律系")
 )
+studentMajors
 ```
 ```{r}
 class(studentMajors)
@@ -37,6 +42,8 @@ levels(studentMajors)
 ```{r}
 as.integer(studentMajors)
 ```
+
+
 ```{r}
 BirthPlace<-factor(c("台北市","台中市","台中市","台北市","台北市"))
 
@@ -68,6 +75,7 @@ dtObjectVector<-ymd_hms(
   c("1970-01-01 00:02:53",
     "1980-02-11 11:25:22")
 )
+#到此電腦即可理解為date time概念
 class(dtObject)
 #POSIX=跨作業系統的協定時間
 #若未更改設定 電腦會自動判斷我們位於經度0度的位置
@@ -75,13 +83,19 @@ class(dtObject)
 
 
 
-
+#你要如何顯示電腦儲存的秒數內容呢？
 ```{r}
+#先查電腦怎儲存dtobject
 typeof(dtObject)
-
 #typeof可看出電腦用什麼方式儲存 
 #double=非整數之意
+as.double(dtObject)
+#or
+as.integer(dtObject)
+dtObject
 ```
+
+
 #顯示目前電腦時區設定
 ```{r}
 Sys.timezone()

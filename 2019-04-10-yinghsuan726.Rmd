@@ -13,22 +13,22 @@ knitr::opts_chunk$set(echo = TRUE)
 library(stringr)
 ```
 #Subset 依條件篩選
-#例如：選出course當中帶有“經濟學”的元素
+例如：選出course當中帶有“經濟學”的元素
 ```{r}
 course <- c("個體經濟學","投資學","總體經濟學")
 ```
-#str_subset(): 保留字串向量元素裡符合某種規律（pattern）的向量元素——會縮小向量長度。
+str_subset(): 保留字串向量元素裡符合某種規律（pattern）的向量元素——會縮小向量長度。
 ```{r}
 str_subset(course,"經濟學")
 #從course中選出包含"經濟學"的物件
 ```
-#str_detect()：偵測（detect）元素裡是否符合某種規律，若符合回TRUE, 不符合回FALSE
+str_detect()：偵測（detect）元素裡是否符合某種規律，若符合回TRUE, 不符合回FALSE
 ```{r}
 str_detect(course,"經濟學")
 #從course中"偵測"物件內是否包含"經濟學"
 ```
 #利用str_sub()取出以下每位學生系別及入學年。
-#str_sub():str_sub(string, start position, end position)
+str_sub():str_sub(string, start position, end position)
 ```{r}
 #定義studentID
 studentID<-c(
@@ -42,13 +42,13 @@ studentID<-c(
 ```
 
 #Join 合併
-#例如：將month和day合併成“3月11日”,“4月5日”,“2月7日”
+例如：將month和day合併成“3月11日”,“4月5日”,“2月7日”
 ```{r}
 #定義month day
 month <- c("3","4","2")
 day <- c("11","5","7")
 ```
-#str_c(): 多個字串向量的合併
+str_c(): 多個字串向量的合併 str_c(串接1,串接2,串接3,串接4...)
 ```{r}
 #定義char1 char2
 char1 <- c("月","月","月")
@@ -70,22 +70,23 @@ str_c(month,"月",day,"日")  #偷懶法
 ```{r}
 month
 day
-str_c(month,day, sep="-")#sep=separation
+str_c(month,day, sep="-")#sep=separation 加分隔
 ```
 #Split：分割
-#str_split(): 分割一個字串向量（後面章節再詳述）
+str_split(): 分割一個字串向量（後面章節再詳述）
 
 ```{r}
 dates <- c("3-11", "4-5",  "2-7")
 str_split(dates,"-")#以-作為分割點分割
 ```
 #Replace: 取代
-#str_replace()
+str_replace(string,要被取代的,拿什麼取代)
 ```{r}
 dates
 str_replace(dates,"-","月")#將-以月取代
 ```
 #str_replace_all()
+所有一樣的都取代
 ```{r}
 dates2 <- c("3-11-2019", "4-5-2017",  "2-7-2015")
 dates2
@@ -127,6 +128,7 @@ birthday<-filmVotingData$`出生西元年月日（驗證本人用）`
 
 ```{r}
 birthday[1:2]#取出birthday的前兩項
+head(birthday)
 str_sub(birthday,1,4)->a
 str_sub(birthday,5,6)->b
 str_sub(birthday,7,8)->c
@@ -143,11 +145,14 @@ str_c("西元",a,"年",b,"月",c,"日")
 #法一
 a<-str_sub(民國年月,1,3)
 a
-b<-str_sub(民國年月,4,6)
+b<-str_sub(民國年月,4,6)#含斜線
 b
 
+as.integer(a)
 c<-as.integer(a)+1911
 c
+
+
 str_c(c,b)
 ```
 ```{r}
@@ -215,6 +220,7 @@ aWithNames
 #List範例
 ```{r}
 b1<-list("a","b",c(1:10))
+b1
 typeof(b1)
 ```
 b1有三個元素：
