@@ -1,6 +1,8 @@
 ---
 title: "0515"
 output: html_notebook
+editor_options: 
+  chunk_output_type: inline
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
@@ -127,14 +129,7 @@ List物件比atomic vector多了使用$.提取元素的選擇，
 唯.必需是**元素名稱**。
 
 由於data frame也是list type，所以也可以用$.來提取/新增/修改變數欄位值。
-```{r}
-#sol1
-b$元素3<-FALSE
-b
-#sol2
-b[c(3,5)] <- c(FALSE,7)
-b
-```
+
 extra.使用"元素名稱"創新元素
 ```{r}
 names(b)
@@ -170,34 +165,134 @@ ymd("1997-06-01")<=exData3$期間&exData3$期間<=ymd("1998-12-01")->exData3$isA
 ```
 **利用「isAsiaCrisis」值，結合使用[.R,.C]取出1997-06-01到1998-12-01亞洲金融危機的子樣本。**
 ```{r}
-sum(unlist(exData3[,4]))
-#%>%unlist(.)%>%sum(.)
+exData3[exData3$isAsiaCrisis,]->tt
+tt
 ```
 
 
 
 
+#引入8.1.2 範例2的資料
+```{r}
+library(readr)
+transcriptDataFinal <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/transcriptDataFinal.csv")
+```
+ex.選出學號為92aS67fee的資料
+```{r echo=TRUE}
+#sol1
+transcriptDataFinal[transcriptDataFinal$學號=="92aS67fee",]->z
+z
+#sol2
+transcriptDataFinal$學號=="92aS67fee"->hh
+transcriptDataFinal[hh,]->s
+s
+```
+
+#第 8 章 Function and Conditional Execution
+反覆執行的程序可定義成為函數function物件。
+
+8.1 函數定義
+函數名稱 <- function(input1, input2,...){
+
+函數程序內容
+
+return(output)
+}
+8.1.1 範例1
+
+ 
+
+定義函數
+```{r}
+utility_cobb_douglass <- function(x,y,.alpha,.beta){
+  utilValue <- x^.alpha*y^.beta # 程序產生output值
+  return(utilValue) # 傳回output值
+}
+```
+查詢utility_cobb_douglass物件的class
+```{r}
+class(utility_cobb_douglass)
+```
+使用函數
+```{r}
+utility_cobb_douglass(1,2,0.5,0.8)
+```
+沒有<-儲存output時，output value會顯示在螢幕。
+
+有<-儲存output時, output value不會顯示在螢幕。
 
 
+```{r}
+myfunction<-function(x,.alpha){
+  sumvalue<-x+.alpha
+  return(sumvalue)
+}
+```
 
+#供給函數：Qs=a+b*P
+ex.請寫一個供給函數supply_fun()，它有三個inputs：a,b及P; output為Qs。
+```{r}
+supply_fun<-function(a,b,P){
+  Qs<-a+b*P
+  return(Qs)
+}
+```
 
+```{r}
+supply_fun(1,3,10)
+```
 
+#需求函數：Qd=c-d*P
 
+ex.請寫一個供給函數demand_fun()，它有三個inputs：c,d及P; output為Qd。
+```{r}
+demand_fun <- function(c,d,P){
+  Qd <- c-d*P
+  return(Qd)
+}
+```
 
+```{r}
+demand_fun(6,1,5)
+```
+#8.1.2 範例2
+```{r}
+library(readr)
+transcriptDataFinal <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/transcriptDataFinal.csv")
+```
+以下是算出學號“92aS67fee”的平均成績（GPA）的程序
+```{r}
+studentID <-"92aS67fee" 
 
+transcriptDataFinal$學號==studentID -> logiChosenStudent
 
+sum(transcriptDataFinal$學期成績[logiChosenStudent]*
+  transcriptDataFinal$學分數[logiChosenStudent])/
+  sum(transcriptDataFinal$學分數[logiChosenStudent]) -> GPA
+```
 
+如果常常要算學生的GPA，我們可以定義一個「input學號便可output其GPA」的函數
+```{r}
+gpa_fun <- function(studentID){
+  transcriptDataFinal$學號==studentID -> logiChosenStudent
+  sum(transcriptDataFinal$學期成績[logiChosenStudent]*
+    transcriptDataFinal$學分數[logiChosenStudent])/
+    sum(transcriptDataFinal$學分數[logiChosenStudent]) -> GPA
+  return(GPA)
+}
+```
 
+```{r}
+gpa_fun <- function(studentID){
+  transcriptDataFinal$學號==studentID -> logiChosenStudent
 
+  subSample <- transcriptDataFinal[logiChosenStudent,]
 
-
-
-
-
-
-
-
-
+  sum(subSample$學期成績*subSample$學分數)/
+    sum(subSample$學分數) -> GPA
+  return(GPA)
+}
+```
 
 
 
