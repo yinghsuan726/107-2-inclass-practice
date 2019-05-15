@@ -1,0 +1,208 @@
+---
+title: "0515"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+
+#7.5 names, colnames, rownames
+names():
+
+從vector角度對元素進行名稱查詢
+
+names() <-：可用來命名。
+```{r}
+Vector1<-letters[1:6]
+Vector1
+names(Vector1)
+```
+
+```{r}
+names(Vector1) <- c('名稱1','名稱2','名稱3','名稱4','名稱5','名稱6')
+names(Vector1)
+```
+
+```{r}
+Vector1[["名稱4"]]
+```
+#7.3 Data Frame
+考慮以下資料，它含有學號，姓名，成績等三個資料變數，變數裡的元素各別代表一筆資料：
+
+list：因為三個變數向量的type不相同，只能用list儲存。
+```{r}
+StuList <- list(
+  學號=c(172,214,322,425,517),
+  姓名=c("小明","大雄","胖虎","小新","大白"),
+  成績=c(80,60,90,70,50)
+  )
+StuList 
+```
+
+#colnames/rownames
+
+colnames()，rownames()：
+
+分別對方形資料class（即matrix與data frame）的欄（column）及行（row）進行名稱查詢。
+
+colnames() <-，rownames() <-：可用來命名。
+**沒有箭頭是查詢 有箭頭是更改colnames**
+
+**data frame：若每個變數相同元素位置來自於同一筆資料，我們可以使用data frame的class來儲存這樣的（長）方形資料表。**
+```{r}
+studf2<-data.frame(
+  學號=c(172,214,322,425,517),
+  姓名=c("阿明","阿花","胖虎","大熊","小白"),
+  成績=c(80,78,90,56,67),
+  stringsAsFactors=FALSE
+)
+studf2
+```
+data.frame()遇到變數輸入為character class時，內定會被轉成factor。
+#查詢colnames名稱
+```{r}
+colnames(studf2)
+names(studf2)
+```
+
+改名稱
+```{r}
+colanames(studf2)<-c("col1","col2","col3")
+colnmes(studf2)#查詢colnames是什麼
+#沒有箭頭是查詢 有箭頭是更改colnames
+```
+#請將StuDF的欄位變數名稱改成StudentID, Name, Grade。
+```{r}
+colnames(studf2)[c(2,3)]<-c("Name","Grade")
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+#7.6 新增/替換元素
+元素提取[.],[[.]],$.也可用來進行元素「值」修改或「新增」。
+
+若.所指定的元素不存在，則為「新增」。
+
+若.所指定的元素存在，則為「修改」。
+
+7.6.1 使用[[.]] <-或$. <-
+範例
+```{r}
+a <- c("1","b","TRUE")
+a
+a[[2]] <- "c" # 元素存在
+a[[5]] <- "7" # 元素不存在
+a
+
+#但因為本來只有3個元素 而現在新增的是第5個元素 所以第4個為NA
+```
+ex. 請將下面的TRUE換成FALSE, 並增加第5個元素其值為數字7。
+```{r}
+b <- list(
+  元素1=1,
+  元素2="Hello",
+  元素3=TRUE
+)
+```
+```{r}
+#sol1
+b[[3]]<-FALSE
+b[[5]]<-7
+b
+#sol2
+b[c(3,5)] <- c(FALSE,7)
+b
+#取法[[]]=$
+```
+#取法[[]]=$
+List物件比atomic vector多了使用$.提取元素的選擇，
+
+唯.必需是**元素名稱**。
+
+由於data frame也是list type，所以也可以用$.來提取/新增/修改變數欄位值。
+```{r}
+#sol1
+b$元素3<-FALSE
+b
+#sol2
+b[c(3,5)] <- c(FALSE,7)
+b
+```
+extra.使用"元素名稱"創新元素
+```{r}
+names(b)
+b[["新元素A"]] <- c(1,2,3)
+b$新元素B <- c(T,F,T)
+b
+```
+#Exercise7.6
+
+引入以下匯率資料：
+```{r}
+library(readr)
+exData3 <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/exData3.csv",
+                    col_types = cols(
+                      匯率 = col_number(),
+                      期間 = col_character()))
+```
+```{r}
+class(exData3$期間)
+```
+
+**取出「期間」變數轉成date class。**
+```{r}
+library(lubridate)
+head(exData3$期間)
+exData3$期間<-ymd(exData3$期間)
+class(exData3$期間)
+exData3
+```
+**增加一個「isAsiaCrisis」的logical變數，其值為TRUE若「期間」介於1997-06-01到1998-12-01（含前後）。**
+```{r}
+ymd("1997-06-01")<=exData3$期間&exData3$期間<=ymd("1998-12-01")->exData3$isAsiaCrisis
+```
+**利用「isAsiaCrisis」值，結合使用[.R,.C]取出1997-06-01到1998-12-01亞洲金融危機的子樣本。**
+```{r}
+sum(unlist(exData3[,4]))
+#%>%unlist(.)%>%sum(.)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
