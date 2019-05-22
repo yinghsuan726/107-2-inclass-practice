@@ -1,0 +1,22 @@
+---
+title: "2019-05-22-yinghsuan726"
+output: html_notebook
+---
+
+-請把以America/New_York時區輸入的時間字串"1973-02-21 12:05:22"，轉成date time class, 再改成Asia/Taipei時間顯示。
+
+ymd_hms_tzChange(input,fromTzone,toTzone)
+
+```{r}
+#先寫個別案例的程式碼
+ymd_hms( " 1973-02-21 12:05:22 " , tz = " America/New_York " ) - > DateTime1
+with_tz( DateTime1 , tz = " Asia/Taipei " ) - > DateTime2
+#再將三元素以代號做替換放入通用函數中,而函數的寫法就是個別案例中的程式碼
+ymd_hms_tzChange <- function ( input , fromTzone , toTzone ){
+ DateTime1 <- ymd_hms( input , tz = fromTzone )
+ DateTime2 <- with_tz( DateTime1 , tz = toTzone )
+}
+ymd_hms_tzChange( " 1973-02-21 12:05:22 " , " America/New_York " , " Asia/Taipei " ) - > a
+a
+```
+
