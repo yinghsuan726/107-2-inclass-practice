@@ -19,4 +19,48 @@ ymd_hms_tzChange <- function ( input , fromTzone , toTzone ){
 ymd_hms_tzChange( " 1973-02-21 12:05:22 " , " America/New_York " , " Asia/Taipei " ) - > a
 a
 ```
+#8.1.1
+執行以下程序會隨機產生民國年月資料：
+```{r}
+library(stringr)
+sample(99:103,15,replace = T)-> yy
+sample(1:12,15,replace=T)-> mm
+str_c("民國",str_pad(yy,3,"left","0"),"年",mm,"月") -> twDates
+```
+執行以下程序會把民國年月字串物件twDates轉成date class的西元年月日物件yyyymmdd，其中dd為01。
+```{r}
+library(stringr); library(lubridate)
+yyyy<-as.integer(str_extract(twDates,"(?<=(民國))[:digit:]+"))+1911
+mm<-str_extract(twDates,"[:digit:]+(?=月)")
+yyyymmdd <- ymd(str_c(yyyy,mm,"01",sep="-"))
+```
+若要常常轉換不同民國年月成西元date，以上述程序為例，何者為input？何者為output?
+
+請寫一個函數其名稱為date_convert_twYM，且date_convert_twYM(x)可以把一個民國年月字串物件x轉成date time class的西元年月日物件輸出。
+```{r}
+date_convert_twYM<-function(x){
+  yyyy<-as.integer(str_extract(x,"(?<=(民國))[:digit:]+"))+1911
+  mm<-str_extract(x,"[:digit:]+(?=月)")
+  yyyymmdd <- ymd(str_c(yyyy,mm,"01",sep="-"))
+  return(yyyymmdd)
+}
+date_convert_twYM(twDates)
+```
+#8.1.2 預設值defaults
+
+Input arguments一般分成兩類：
+
+data arguments: 幾乎每次使用時的輸入值都會改變。（如上述的x,y）
+
+detail arguments/parameters: 函數參數值或設定值，不會常常改變。（如上述的.alpha, .beta）
+
+建議data arguments放前，detail/parameter arguments放後且設預設值。
+
+
+```{r}
+utility_cobb_douglass2 <- function(x,y,.alpha=0.5,.beta=0.5){
+  utilValue <- x^.alpha*y^.beta
+  return(utilValue)
+}
+```
 
