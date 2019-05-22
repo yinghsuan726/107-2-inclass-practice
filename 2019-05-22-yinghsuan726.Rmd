@@ -64,3 +64,48 @@ utility_cobb_douglass2 <- function(x,y,.alpha=0.5,.beta=0.5){
 }
 ```
 
+```{r}
+utility_cobb_douglass2(1,2) # 使用預設值
+utility_cobb_douglass2(1,2,0.5,0.8) # 自定參數值
+```
+先前的date_convert_twYM()函數一律把年月資料加上「01」日，請改寫函數讓“01”為「日」的預設值。
+#有預設值
+```{r}
+date_convert_twYM<-function(x,dd="01"){
+  yyyy<-as.integer(str_extract(x,"(?<=(民國))[:digit:]+"))+1911
+  mm<-str_extract(x,"[:digit:]+(?=月)")
+  yyyymmdd <- ymd(str_c(yyyy,mm,"01",sep="-"))
+  return(yyyymmdd)
+}
+#與無預設值差別在於function(dd="01")
+date_convert_twYM(twDates)
+```
+#無預設值
+```{r}
+date_convert_twYM<-function(x){
+  yyyy<-as.integer(str_extract(x,"(?<=(民國))[:digit:]+"))+1911
+  mm<-str_extract(x,"[:digit:]+(?=月)")
+  yyyymmdd <- ymd(str_c(yyyy,mm,"01",sep="-"))
+  return(yyyymmdd)
+}
+date_convert_twYM(twDates)
+```
+
+8.1.3 return與input
+函數程序並不一定要有return與input
+
+範例3
+```{r}
+now <- function(){
+  currentDateTime <- Sys.time()
+  hh<-hour(currentDateTime)
+  mm<-minute(currentDateTime)
+  cat("現在是",hh,"點",mm,"分")
+}
+```
+cat()會將所有輸入元素串成一串字在螢幕顯示。
+
+
+
+
+
