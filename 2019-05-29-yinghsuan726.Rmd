@@ -7,12 +7,224 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
+#8.1.3 return與input
+函數程序並不一定要有return與input
+
+範例3
 ```{r}
-plot(cars)
+now2 <- function(){
+  currentDateTime <- Sys.time()
+  hh<-hour(currentDateTime)
+  mm<-minute(currentDateTime)
+  cat("現在是",hh,"點",mm,"分")
+}
+```
+cat()會將所有輸入元素串成一串字在螢幕顯示。
+```{r}
+#now(now2)
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+browseURL()函數可以輸入網址後自動開啟瀏覽器連到該網頁，如：
+```{r}
+browseURL("https://www.ntpu.edu.tw")
+```
+ex.請寫一個textbookURL函數，執行textbookURL()會自動開啟課程網頁。
+```{r}
+textbookURL <- function(){
+browseURL("https://bookdown.org/tpemartin/ntpu-programming-for-data-science/function-and-conditional-execution.html#returninput")}
+textbookURL()
+```
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+#8.1.4 多個output值
+R的函數只能輸出一個物件值，所以若有多個物件值要輸出，可以先併成一個list物件輸出。
+```{r}
+library(readr)
+transcriptDataFinal <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/transcriptDataFinal.csv")
+```
+
+範例4
+```{r}
+gpa_fun <- function(studentID){
+  transcriptDataFinal$學號==studentID -> logiChosenStudent
+  
+  subSample <- transcriptDataFinal[logiChosenStudent,]
+  
+  sum(subSample$學期成績*subSample$學分數)/
+    sum(subSample$學分數) -> GPA
+  return(GPA)
+}
+```
+想要輸出GPA及該名學生成績單子樣本subSample，可改成。
+```{r}
+gpa_fun2 <- function(studentID){
+  transcriptDataFinal$學號==studentID -> logiChosenStudent
+  
+  subSample <- transcriptDataFinal[logiChosenStudent,]
+  
+  sum(subSample$學期成績*subSample$學分數)/
+    sum(subSample$學分數) -> GPA
+  return(
+    list(
+      平均成績=GPA,
+      成績單=subSample
+      )
+  )
+}
+gpa_fun2("92aS67fee")
+```
+這裡return的value會是個list, 它包含兩個元素：平均成績（內容為GPA）、成績單（內容為subSample）。
+```{r}
+gpa_fun2("92aS67fee") -> outputValue
+outputValue$平均成績
+outputValue$成績單
+```
+
+ex.創造一個demand_supply_fun(P,a,b,c,d)，它會輸出一個list包含三個元素：供給量，需求量，超額供給量
+```{r}
+demand_supply_fun <-function(P,a,b,c,d){
+  Qs <- a + b*P
+  Qd <- c - d*P
+  return(
+    list(
+      供給量=Qs,
+      需求量=Qd,
+      超額供給量=Qs - Qd
+    ) )
+}
+#供給函數：Qs=a+b∗P
+#需求函數：Qd=c−d∗P
+```
+
+#8.2 依條件執行
+8.2.1 用法一：
+
+if(邏輯條件){
+  成立時執行
+}
+```{r}
+a <- readline(prompt = "請輸入一個數字： ")
+if(a < 0) {
+  print("a為負值")
+}
+```
+#範例5
+供給函數價格不為負值
+```{r}
+a<-0
+b<-1
+supply_fun <- function(P,a,b){
+  Qs <- a+b*P
+  return(Qs)
+}
+supply_fun(P=-1,0,1)
+```
+
+```{r}
+supply_fun2 <- function(P,a,b){
+  Qs <- a+b*P
+  if(P>=0) {
+    return(Qs)
+  }
+}
+supply_fun2(P=-1,0,1)
+supply_fun2(P=2,0,1)
+```
+
+8.2.2 用法二：
+if(邏輯條件){
+  成立時執行
+} else {
+  不成立時執行
+}
+```{r}
+a <-  readline(prompt = "請輸入一個數字： ")
+if(a < 0) {
+  print("a為負值")
+} else {
+  print("a不為負值")
+}
+```
+範例6
+```{r}
+supply_fun3 <- function(P,a,b){
+  Qs <- a+b*P
+  if(P < 0) {
+    message("P不能為負值") # 在螢幕出現的「錯誤」提示，沒有輸出任何值
+  } else {
+    return(Qs)
+  }
+}
+supply_fun3(P=-1,0,1)
+supply_fun3(P=2,0,1)
+```
+#print()是單純的訊息輸出，而message()是用在「錯誤」狀況下的訊息顯示。兩者在程式除錯時，會有明顯差別。
+ex.修改範例2的gpa_fun, 若輸入學號不存在則在螢幕顯示“noStudentID”。
+
+```{r}
+gpa_fun <- function(studentID){
+  if(studentID%in%transcriptDataFinal$學號){
+   transcriptDataFinal$學號==studentID -> logiChosenStudent
+  
+   subSample <- transcriptDataFinal[logiChosenStudent,]
+  
+   sum(subSample$學期成績*subSample$學分數)/
+    sum(subSample$學分數) -> GPA
+  return(GPA)
+   }else{
+    message("noStudentID")
+}}
+gpa_fun("92aS67fee") # 顯示82.85276
+gpa_fun("aa829838s") # noStudentID
+```
+#錯誤條件下法
+```{r}
+"92aS67fee"==transcriptDataFinal$學號
+#會回傳與transcriptDataFinal$學號中的每個學號相比的true false
+#但我們只要知道他有沒有在transcriptDataFinal$學號裡
+```
+
+#正確條件下法
+```{r}
+"92aS67fee"%in%transcriptDataFinal$學號
+```
+
+8.2.3 用法三：
+if(條件A) {
+  條件A成立執行
+} else if(條件B) {
+  上個條件不成立，條件B成立時執行
+} else {
+  若以上情境都不成立時執行
+}
+```{r}
+a <- readline(prompt = "請輸入一個數字： ")
+if(a==1) {
+  print("你輸入了1")
+} else if(a==2) {
+  print("你輸入了2")
+} else if(a==3) {
+  print("你輸入了3")
+} else {
+  print("你輸入了其他數字")
+}
+```
+#範例7
+供給量不能為負數:
+Qs=a+b∗P≥0 ⇒ P≥−a/b
+```{r}
+supply_fun4 <- function(P,a,b){
+  Qs <- a+b*P
+  if(P < 0) {
+    message("P can't be negative") # 在螢幕出現的「錯誤」提示，沒有輸出任何值
+  } else if(P < -a/b) {
+    message("P must>=",-a/b,"(=-a/b)")
+  } else {
+    return(Qs)
+  }
+}
+supply_fun4(P=-1,-3,1)
+supply_fun4(P=2,-3,1)
+supply_fun4(P=3,-3,1)
+```
+
