@@ -281,4 +281,31 @@ a>2
 any(a>2)
 all(a>2)
 ```
+#8.3 Environment
+當函數被呼喚(called) 執行時會R會創造一個新的Environment，它會是Global Environment的子層。
 
+此子層環境稱為「執行環境（execution environment）」。
+
+此子層用來執行函數{...}內的程序，中間如果有生成任何新的物件，都會活在子層中，並不會活在Global Environment。
+
+此子層執行中如果用到一個物件不存在子層它會往母層找，即這裡的Global Environment去找來使用。
+
+函數執行完「執行環境」就會被刪除，若有物件值要保留在Global environment，需要透過return輸出到Global environment。
+
+```{r}
+a <- 3
+
+testfun <- function(x){
+  y <- a/4
+  output <- x*y
+  return(output)
+}
+
+testfun(2)
+
+a <- 4
+testfun(2)
+```
+y物件只短暫活在「執行環境」，不會出現在Global environment。
+
+testfun被使用執行時「執行環境」才會出現，a的值是多少得看當下Global environment的a值為多少而定。
