@@ -282,7 +282,7 @@ any(a>2)
 all(a>2)
 ```
 #8.3 Environment
-當函數被呼喚(called) 執行時會R會創造一個新的Environment，它會是Global Environment的子層。
+當函數被呼喚(called) 執行時會R會創造一個新的Environment，它會是Global Environment(螢幕右上角)的子層環境。
 
 此子層環境稱為「執行環境（execution environment）」。
 
@@ -305,7 +305,10 @@ testfun(2)
 
 a <- 4
 testfun(2)
+#304行執行時的a=3
+#307行執行時的a=4
 ```
+
 y物件只短暫活在「執行環境」，不會出現在Global environment。
 
 testfun被使用執行時「執行環境」才會出現，a的值是多少得看當下Global environment的a值為多少而定。
