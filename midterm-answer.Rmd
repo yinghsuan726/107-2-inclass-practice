@@ -109,6 +109,13 @@ passData
 ```
 
 ```{r}
+## ----ans4----------------------------------------------------------------
+passLogic <- data3$成績>=60
+map(data3,~.[passLogic]) -> passData
+passData
+```
+
+```{r}
 #my answer
 earngrade<-data3$成績>=60
 passData<-list(
@@ -151,6 +158,13 @@ str_replace_all(twDates,"(民國)|(月)","")
 ### 5.2 取出年份
 取出民國年的並加上1911年轉成西元年，將此年份存在答案物件westYears裡（class為integer）。(hint: `str_split()`可分割字串,再使用第3題取出你要的部份)
 ```{r ans52}
+## ----ans52---------------------------------------------------------------
+str_split(twDates2,"年") -> dateList
+dateList
+map(dateList,~.[[1]]) -> yy
+as.integer(yy)+1911 -> westYears
+
+westYears
 # westYears
 ```
 
@@ -167,9 +181,27 @@ westYears
 將twDates民國年月轉成date class的西元年月日，原始資料沒有日，請設定成每月1日。例如："民國100年5月"會轉成2011-05-01的date class日期。答案請存westDates答案物件。
 
 ```{r ans53}
+head(twDates)
+str_sub(twDates,7,9)->month
+str_replace(month,"月","")->month
+month
+str_c(westYears,month,"01",sep = "-")->westDates
+westDates
+ymd(westDates)->westDates
+class(westDates)
+westDates
 # westDates
 ```
 
+```{r}
+## ----ans53---------------------------------------------------------------
+map(dateList,~.[[2]]) -> mm
+str_c(westYears,mm,"1",sep="-") -> ymdString
+ymdString
+ymd(ymdString) -> westDates
+
+westDates
+```
 
 ## 6 differen time zone
 執行以下程式引入invoiceList物件，其中「訂單時區」與「訂單時間(以訂單時區顯示)」的每筆資料是訂單來自時區及以該時區輸入的下單時間字串，「UTC時間」則是個目前無特別意義的UTC時間。
@@ -346,7 +378,7 @@ sum(sampledTranscriptData$學分數[logiSelect]*
 ```
 
 ```{r}
-#my answer
+#my answer 和正解一樣
 sampledTranscriptData$學號=="410073409b"&sampledTranscriptData$學年==101&sampledTranscriptData$學期==1->grade
 sum(sampledTranscriptData$學期成績[grade]*sampledTranscriptData$學分數[grade])/sum(sampledTranscriptData$學分數[grade])->studentGPA
 studentGPA
