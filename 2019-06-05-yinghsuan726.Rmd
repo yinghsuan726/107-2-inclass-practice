@@ -7,12 +7,153 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
+#8.4 函數使用
+不寫input argument名稱
 ```{r}
-plot(cars)
+utility_cobb_douglass2 <- function(x,y,.alpha=0.5,.beta=0.5){
+  utilValue <- x^.alpha*y^.beta
+  return(utilValue)
+}
 ```
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+input順序要依原始函數定義順序
+```{r}
+utility_cobb_douglass2(1,2,0.5,0.8)
+```
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+寫input argument名稱
+```{r}
+utility_cobb_douglass2(1,2,.beta=0.8,.alpha=0.5)
+```
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r}
+utility_cobb_douglass2(.beta=0.8,1,.alpha=0.5,2)
+```
+
+**第 9 章 Iteration**
+當我們對一系列的資料進行相同的處理程序時，迴圈（loop）是相當有用的工具。
+
+針對一系列的「學號」各別進行「平均成績計算」
+
+針對本班所有「學號」各別進行「課堂練習Github Commit查詢有效出席次數」
+------------
+
+迴圈三元素:
+
+sequence：針對的「一系列對象」
+
+body：每個對象要做的事
+
+output：做完的成品要如何儲存
+------------
+
+針對一系列的「學號」各別進行「平均成績計算」：
+
+sequence: 一系列學號（「全部可能學號」為sequence source）
+
+body: 各別進行「平均成績計算」
+
+output: 所有學號的平均成績
+
+針對本班所有「學號」各別進行「課堂練習Github Commit查詢有效出席次數」
+
+sequence: 一系列學號（「全部可能學號」為sequence source）
+
+body: 各別進行「課堂練習Github Commit查詢有效出席次數」
+
+output: 所有學號有效出席次數
+
+#9.1 Sequence
+
+語法
+
+for(i in sequence_source向量){
+
+  對每個`sequence_source向量[[i]]`要做的事情
+  
+}
+
+#範例1
+執行以下程序得到transcriptDataFinal資料及平均成績計算函數gpa_fun():
+
+```{r}
+load(url("https://github.com/tpemartin/github-data/blob/master/loopTranscriptData.Rda?raw=true"))
+```
+```{r}
+gpa_fun(transcriptDataFinal$學號[[1]])
+```
+
+對一系列的「學號」各別進行「平均成績計算」:
+
+系列「學號」集合：
+```{r}
+studentIds <- unique(transcriptDataFinal$學號) # 全部可能學號
+```
+因此「一系列學號」可透過studentIds[[i]]（i=1,…）來一一取出：
+
+studentIds為sequence_source
+如何針對「一系列學號」，我們有以下做法：
+```{r}
+# 以前5筆學號為sequence_source
+studentIds5 <- studentIds[1:5]
+studentIds5
+```
+
+9.1.1 作法一：
+```{r}
+for(i in studentIds5){
+  print(i) # 印出studentIds5[[i]]
+}
+```
+
+9.1.2 作法二：
+```{r}
+for(i in c(1:5)){
+  print(i) 
+}
+```
+因此
+```{r}
+for(i in c(1:5)){
+  print(studentIds5[[i]]) # 
+}
+```
+
+9.1.3 作法三：seq_along()
+seq_along()依input物件元素個數產生對應的整數向量，相當於c(1:length(input))
+
+```{r}
+for(i in seq_along(studentIds5)){
+  print(studentIds5[[i]])
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
