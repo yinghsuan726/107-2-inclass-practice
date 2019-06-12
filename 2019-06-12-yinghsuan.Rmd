@@ -213,10 +213,41 @@ committer： commit-> committer-> name元素值。
 commitDate: commit-> commiter-> date元素值。
 
 任務一：存下來每個commit的author。
+```{r}
+
+for (i in seq_along(commitHistory)) {
+  print(commitHistory[[i]][["commit"]][["author"]][["name"]])
+}
+```
+```{r}
+for(i in seq_along(commitHistory)){
+  print(
+    str_c(
+      "Author is ",
+      commitHistory[[i]][["commit"]][["author"]][["name"]],
+      ". Committer is ",
+      commitHistory[[i]][["commit"]][["committer"]][["name"]]
+      )
+    )
+}
+```
+
 
 任務二：存下來每個commit的committer。
+```{r}
+for (i in seq_along(commitHistory)) {
+  print(commitHistory[[i]][["commit"]][["committer"]][["name"]])
+}
+```
+
 
 任務三：存下來每個author與committer同人的commitDate。
+```{r}
+for (i in seq_along(commitHistory)) {
+  (commitHistory[[i]][["commit"]][["committer"]][["name"]]==commitHistory[[i]][["commit"]][["author"]][["name"]])->logisame
+  print(logisame)
+}
+```
 
 Sequence source是什麼？
 
@@ -226,5 +257,105 @@ Sequence source是什麼？
 
 完成for loop任務：檢查gmailAddress中「每個」元素，若沒有寫“@gmail.com”則加上。
 
-9.2 Output
+#9.2 Output
 有時我們想把body程序中的某些值視為output value存起來，這時可依output value的type/mode, 透過vector()函數先產生一個空的output value儲存物件來儲存for loop中的output value。
+
+vector(mode,length)
+mode: 儲存容器物件要存的output value類型（“character”, “numeric”,“integer”, “logical”，“list”）
+
+length: 儲存容器物件要存多少個output value。
+
+以下是針對不同資料類型用來存5個值的容器物件：
+```{r}
+saveCharacter <- vector("character",5)
+saveCharacter
+
+saveNumeric <- vector("numeric",5)
+saveNumeric
+
+saveLogical <- vector("logical",5)
+saveLogical
+
+saveList <- vector("list",5)
+saveList
+```
+某個output value要存在容器那個位置，用元素值取代的概念來取代該位置的預設值為output value。
+```{r}
+# 把"你好"存在saveCharacter第3個位置
+saveCharacter # 儲存前
+saveCharacter[[3]] <- "你好"
+saveCharacter # 儲存後
+
+# 把 72.3 存在saveNumeric第3個位置
+saveNumeric # 儲存前
+saveNumeric[[3]] <- 72.3
+saveNumeric # 儲存後
+
+# 把 TRUE 存在saveLogical第3個位置
+saveLogical # 儲存前
+saveLogical[[3]] <- TRUE
+saveLogical # 儲存後
+
+# 把 list(姓名="小明",電話="02-86741111") 存在saveList第3個位置
+saveList # 儲存前
+saveList[[3]] <- list(姓名="小明",電話="02-86741111")
+saveList # 儲存後
+```
+在for loop裡，若有output value要存，每個i均會有儲存的必要，因此多數時候vector(mode, length)中的length為sequence source的元素個數，可使用：
+
+length(sequence_source)
+取得總個數。
+
+有儲存需求的for loop:
+
+決定儲存容器要存的「資料型態」及「資料個數」。
+
+找出sequence source。
+
+Body內容：
+
+先將任務中的「每個」改成「第i個」以確認body內容
+
+任務中有儲存需要時，存在儲存容器的「第i個」位置
+
+組合「每個」任務的for loop，使用以下模式：
+saveContainer <- vector(mode,length)
+for(i in seq_alog(sequence_source)){
+  body
+}
+範例3
+任務: 將transcriptDataFinal資料中每個學號的平均成績算出來並儲存（使用gpa_fun()）
+
+決定儲存容器要存的「資料型態」及「資料個數」。
+
+資料型態：平均成績是numeric。
+
+資料個數：每個學號會有一筆要存，所以總學號數是總資料個數。
+
+找出sequence source：這裡是「不重覆」的所有可能學號
+```{r}
+studentIds <- unique(transcriptDataFinal$學號) # sequence_source
+saveGPAs <- vector("numeric",length(studentIds)) # saveContainer
+```
+先將任務中的「每個」改成「第i個」以確認body內容，要先令i <-1：這裡即是把「第i個」學號的平均成績算出來並儲存。
+```{r}
+i <- 1
+saveGPAs[[i]] <- gpa_fun(studentIds[[i]])
+```
+body為i <- 1以後的所有程序
+
+組合「每個」任務的for loop，使用以下模式：
+saveContainer <- vector(mode,length)
+for(i in seq_alog(sequence_source)){
+  body
+}
+```{r}
+studentIds <- unique(transcriptDataFinal$學號) # sequence_source
+saveGPAs <- vector("numeric",length(studentIds)) # saveContainer
+for(i in seq_along(studentIds)){
+  saveGPAs[[i]] <- gpa_fun(studentIds[[i]])
+}
+```
+
+
+
