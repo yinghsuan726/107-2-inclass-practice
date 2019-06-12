@@ -403,17 +403,15 @@ for (i in seq_along(commitHistory)) {
 #練習
 任務一：存下來每個commit的author。
 
-1. sequence source
-commitHistory
+1. sequence source =>commitHistory
 
 2. body
 存下來「第i個」commit的author。
 ```{r}
-
 saveCommitAuthor <-
   vector("character",length(commitHistory))
 commitHistory[[i]]$commit$author$name -> saveCommitAuthor[[i]]
-i<-1
+i<-1#先帶一個進去檢查 可以的話再用到loop
 saveCommitAuthor[[i]]
 ```
 檢查一下
@@ -434,9 +432,78 @@ saveCommitAuthor
 
 任務二：存下來每個commit的committer。
 ```{r}
+#1.決定儲存容器要存的「資料型態」及「資料個數」
+savecommitter<-vector("character",length(commitHistory))
+#2.Body內容：
+#先將任務中的「每個」改成「第i個」以確認body內容
+#任務中有儲存需要時，存在儲存容器的「第i個」位置
+ savecommitter[[i]]<-commitHistory[[i]][["commit"]][["committer"]][["name"]]
+ i<-1
+ savecommitter
+```
+```{r}
+#3.組合「每個」任務的for loop，使用以下模式
+for (i in seq_along(commitHistory)) {
+  savecommitter[[i]]<-commitHistory[[i]][["commit"]][["committer"]][["name"]]
+}
 savecommitter
 ```
 
 
 任務三：存下來每個author與committer同人的commitDate
+```{r}
+
+savedate<-vector("chara
+        ")
+```
+
+任務三：存下來每個author與committer同人的commitDate。
+
+過渡任務：
+存下來每個commit的author, committer, commitDate.
+存下來每個commit的author==commiter的結果
+
+0. saving container
+saveEveryThing <- vector("list",length(commitHistory))
+saveSameLogi <- vector("logical",length(commitHistory))
+1. sequence source
+commitHistory
+2. body
+i <- 1
+
+author_i <- commitHistory[[i]]$commit$author$name
+committer_i <- commitHistory[[i]]$commit$committer$name
+commitDate_i <- commitHistory[[i]]$commit$committer$date
+
+(author_i==committer_i) -> saveSameLogi[[i]]
+list(
+  author=author_i,
+  committer=committer_i,
+  commitDate=commitDate_i
+) -> saveEveryThing[[i]]
+檢查一下
+
+saveEveryThing
+saveSameLogi
+3. for loop
+saveEveryThing <- vector("list",length(commitHistory))
+saveSameLogi <- vector("logical",length(commitHistory))
+for(i in seq_along(commitHistory)){
+  author_i <- commitHistory[[i]]$commit$author$name
+  committer_i <- commitHistory[[i]]$commit$committer$name
+  commitDate_i <- commitHistory[[i]]$commit$committer$date
+
+  (author_i == committer_i) -> saveSameLogi[[i]]
+
+  list(
+    author=author_i,
+    committer=committer_i,
+    commitDate=commitDate_i
+  ) -> saveEveryThing[[i]]  
+}
+saveEveryThing
+print(saveSameLogi)
+saveEveryThing[saveSameLogi] -> saveValidCommitDate
+saveValidCommitDate
+_
 
