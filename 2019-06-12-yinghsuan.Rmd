@@ -323,7 +323,7 @@ saveContainer <- vector(mode,length)
 for(i in seq_alog(sequence_source)){
   body
 }
-範例3
+**範例3**
 任務: 將transcriptDataFinal資料中每個學號的平均成績算出來並儲存（使用gpa_fun()）
 
 決定儲存容器要存的「資料型態」及「資料個數」。
@@ -355,7 +355,88 @@ saveGPAs <- vector("numeric",length(studentIds)) # saveContainer
 for(i in seq_along(studentIds)){
   saveGPAs[[i]] <- gpa_fun(studentIds[[i]])
 }
+
+```
+
+儲存容器若是對應sequence source，將儲存容器元素依sequence source命名會更容易了解資料的對應關係。
+```{r}
+saveGPAsWithNames <- saveGPAs
+names(saveGPAsWithNames) <- studentIds
+
+saveGPAs[1:5] # 元素沒有名字
+saveGPAsWithNames[1:5] # 元素有名字
+```
+
+執行以下程序下載GitHub使用者r-hub在自己的cranlogs repo的commits記錄： https://github.com/r-hub/cranlogs/commits/master
+```{r}
+load(url("https://www.dropbox.com/s/qnz9paigf61yjus/commitHistory.Rda?raw=1"))
+```
+其中：
+
+author: 為其中commit元素底下的author底下的 name元素值（為方便討論以下用->表示為
+commit->author->name)。
+
+committer： commit-> committer-> name元素值。
+
+commitDate: commit-> commiter-> date元素值。
+
+任務一：存下來每個commit的author。
+#sequence source commitHistory
+#body
+```{r}
+
+saveauthor<-vector("character",length(commitHistory))
+commitHistory[[i]][["commit"]][["author"]][["name"]]->saveauthor[[i]]
+i<-1
+saveauthor[[i]]
+```
+
+```{r}
+saveauthor<-vector("character",length(commitHistory))
+for (i in seq_along(commitHistory)) {
+  saveauthor[[i]]<-commitHistory[[i]][["commit"]][["author"]][["name"]]
+}
+ saveauthor
 ```
 
 
+#練習
+任務一：存下來每個commit的author。
+
+1. sequence source
+commitHistory
+
+2. body
+存下來「第i個」commit的author。
+```{r}
+
+saveCommitAuthor <-
+  vector("character",length(commitHistory))
+commitHistory[[i]]$commit$author$name -> saveCommitAuthor[[i]]
+i<-1
+saveCommitAuthor[[i]]
+```
+檢查一下
+```{r}
+saveCommitAuthor
+```
+3. for loop
+```{r}
+saveCommitAuthor <-
+  vector("character",length(commitHistory)) # 0.
+for(i in seq_along(commitHistory)){
+  commitHistory[[i]]$commit$author$name -> saveCommitAuthor[[i]]
+}
+
+saveCommitAuthor
+```
+
+
+任務二：存下來每個commit的committer。
+```{r}
+savecommitter
+```
+
+
+任務三：存下來每個author與committer同人的commitDate
 
