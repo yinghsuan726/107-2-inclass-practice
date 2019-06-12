@@ -1,0 +1,230 @@
+---
+title: "20190612"
+output: html_notebook
+---
+```{r}
+library(stringr)
+```
+
+ 9 章 Iteration
+當我們對一系列的資料進行相同的處理程序時，迴圈（loop）是相當有用的工具。
+
+針對一系列的「學號」各別進行「平均成績計算」
+
+針對本班所有「學號」各別進行「課堂練習Github Commit查詢有效出席次數」
+
+迴圈三元素:
+
+sequence：針對的「一系列對象」
+
+body：每個對象要做的事
+
+output：做完的成品要如何儲存
+
+針對一系列的「學號」各別進行「平均成績計算」：
+
+sequence: 一系列學號（「全部可能學號」為sequence source）
+
+body: 各別進行「平均成績計算」
+
+output: 所有學號的平均成績
+
+針對本班所有「學號」各別進行「課堂練習Github Commit查詢有效出席次數」
+
+sequence: 一系列學號（「全部可能學號」為sequence source）
+
+body: 各別進行「課堂練習Github Commit查詢有效出席次數」
+
+output: 所有學號有效出席次數
+
+針對sequence中每個元素進行body程序，我們使用以下語法，該語法也稱為for迴圈（for loop）:
+
+for(sequence){
+
+ body
+
+}
+9.1 Sequence
+```{r}
+sequence_source <- c("A","B","C")
+```
+
+以下介紹三種sequence產生方式：
+
+i in sequence_source:產生
+
+{sequence_source[[1]],sequence_source[[2]],sequence_source[[3]]}
+序列。
+
+body中只要出現i即代表上述序列的「單一」元素，for loop會不斷遞換i值且重覆執行body直到序列最後一個元素；即用i=sequence_source[[1]]完成body程序，再換i=sequence_source[[2]]完成body程序，再換i=sequence_source[[3]]完成body程序。。
+
+i in c(1:3):產生
+
+{1,2,3}序列，用來對應sequence_source元素粹取時個別元素位置。
+
+body中只要出現i即代表上述序列的「單一」元素，即用i=1完成body程序，再換i=2完成body程序，再換i=3完成body程序。
+
+body中使用sequence_source[[i]]來取出sequence_source序列個別元素。
+
+i in seq_along(sequence_source):產生
+
+{1,2,3}序列
+（序列長度依sequence_source元素個數計）。
+
+body中只要出現i即代表上述序列的「單一」元素；即用i=1完成body程序，再換i=2完成body程序，再換i=3完成body程序。
+
+body中使用sequence_source[[i]]來取出sequence_source序列個別元素。
+
+範例1
+執行以下程序得到transcriptDataFinal資料及平均成績計算函數gpa_fun():
+```{r}
+load(url("https://www.dropbox.com/s/duh5aaqgl2f5m3z/loopTranscriptData.Rda?raw=1"))
+studentIds <- unique(transcriptDataFinal$學號) # 全部可能學號
+studentIds5 <- studentIds[1:5] # 前5筆學號
+```
+
+任務：針對studentIds5裡的學號一一進行print()。
+9.1.1 作法一：
+Sequence: i in studentIds5
+Body: i依序來自於{studentIds5[[1]],...,studentIds5[[5]]}集合
+```{r}
+for(i in studentIds5){ 
+  print(i) 
+}
+```
+
+9.1.2 作法二：
+Sequence: i in c(1:5)
+Body: i依序來自於{1,2,3,4,5}集合
+```{r}
+for(i in c(1:5)){ 
+  print(i) 
+}
+```
+studentIds5[[i]]才會依序來自於{studentIds5[[1]],...,studentIds5[[5]]}
+```{r}
+for(i in c(1:5)){ 
+  print(studentIds5[[i]]) 
+}
+```
+
+9.1.3 作法三：seq_along()
+seq_along()依input物件元素個數產生對應的整數向量，相當於c(1:length(input))
+
+Sequence: i in seq_along(studentIds5)
+Body: i依序來自於{1,2,3,4,5}集合
+studentIds5[[i]]才會依序來自於{studentIds5[[1]],...,studentIds5[[5]]}
+```{r}
+for(i in seq_along(studentIds5)){
+  print(studentIds5[[i]])
+}
+```
+
+大部份時候老師喜歡用seq_along()產生序列。
+
+由於seq_along()只是i由1開始遞換不同數字，進行「一一執行body程序」的動作，在設計上可以先以i <- 1開始，確認body程序正確，再改成for loop寫法。
+
+如：針對studentIds5裡的學號一一進行print()。
+```{r}
+i <- 1
+print(studentIds5[[i]])
+```
+沒問題後，改成for loop
+```{r}
+for(i in seq_along(studentIds5)){
+  print(studentIds5[[i]])
+}
+```
+
+任務：print出studentIds5裡「每個」學號的gpa，使用gpa_fun()。
+
+令i <- 1，print出studentIds5裡「第i個」學號的gpa。
+
+使用for loop, print出studentIds5裡「每個」學號的gpa。
+
+基本for loop寫作步驟：
+
+定義/找出 sequence source.
+
+把任務定義在對「第i個」且令i <- 1以確認body內容.
+用以下for loop模式，完成對「每個」的任務。
+
+for(i in seq_along(sequence_source)){
+  body
+}
+範例2
+執行以下程序：
+
+```{r}
+gmailAddress <- c(
+  "tim@gmail.com",
+  "anita",
+  "yellen@gmail.com",
+  "huang@gmail.com"
+)
+```
+
+任務：檢查gmailAddress中「每個」元素，若沒有寫“@gmail.com”則加上。
+```{r}
+for(i in seq_along(gmailAddress)){
+  if(!str_detect(gmailAddress[[i]],"@gmail.com")){
+    correctAdress<-str_c(gmailAddress[[i]],"@gmail.com")
+    correctAdress->gmailAddress[[i]]
+  }
+}
+gmailAddress
+```
+
+```{r}
+# 開始設定
+gmailAddress <- c(
+  "tim@gmail.com",
+  "anita",
+  "yellen@gmail.com",
+  "huang@gmail.com"
+)
+cat("起始狀況\n")
+gmailAddress
+
+# for loop
+for(i in seq_along(gmailAddress)){
+  if(!str_detect(gmailAddress[[i]],"@gmail.com")){
+    correctGmailAddress <-
+      str_c(gmailAddress[[i]],"@gmail.com")
+    gmailAddress[[i]] <- correctGmailAddress
+  }
+}
+
+cat("修正後狀況\n")
+gmailAddress
+```
+
+執行以下程序下載GitHub使用者r-hub在自己的cranlogs repo的commits記錄： https://github.com/r-hub/cranlogs/commits/master
+```{r}
+load(url("https://www.dropbox.com/s/qnz9paigf61yjus/commitHistory.Rda?raw=1"))
+```
+其中：
+
+author: 為其中commit元素底下的author底下的 name元素值（為方便討論以下用->表示為
+commit->author->name)。
+
+committer： commit-> committer-> name元素值。
+
+commitDate: commit-> commiter-> date元素值。
+
+任務一：存下來每個commit的author。
+
+任務二：存下來每個commit的committer。
+
+任務三：存下來每個author與committer同人的commitDate。
+
+Sequence source是什麼？
+
+完成以下body程序：
+
+令i <- 1，檢查gmailAddress中「第i個」元素，若沒有寫“@gmail.com”則加上。
+
+完成for loop任務：檢查gmailAddress中「每個」元素，若沒有寫“@gmail.com”則加上。
+
+9.2 Output
+有時我們想把body程序中的某些值視為output value存起來，這時可依output value的type/mode, 透過vector()函數先產生一個空的output value儲存物件來儲存for loop中的output value。
