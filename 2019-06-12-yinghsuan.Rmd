@@ -457,6 +457,37 @@ savedate<-vector("chara
         ")
 ```
 
+```{r}
+logiresult <- vector("logical",length(commitHistory))
+for (i in seq_along(commitHistory)) {
+  logiresult[[i]] <- (commitHistory[[i]]$commit$author$name
+        ==commitHistory[[i]]$commit$committer$name)
+}
+commitDATE <- vector("character",length(commitHistory))
+for (i in seq_along(commitHistory)) {
+  commitHistory[[i]]$commit$committer$date -> commitDATE[[i]]
+}
+commitDATE[logiresult] -> commitDatee
+commitDatee
+```
+
+```{r}
+isSame <-  vector("logical",length(commitHistory))
+for (i in seq_along(commitHistory)){
+  isSame[[i]] <- commitHistory[[i]][["commit"]][["author"]][["name"]] == commitHistory[[i]][["commit"]][["committer"]][["name"]]
+  b <- commitHistory[isSame]
+}
+commitdate <- vector("character",length(b))
+for (i in seq_along(b)){
+  commitdate[[i]] <- b[[i]][["commit"]][["author"]][["date"]]
+
+}
+
+
+
+commitdate
+```
+
 任務三：存下來每個author與committer同人的commitDate。
 
 過渡任務：
